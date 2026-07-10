@@ -19,8 +19,8 @@ MODELO_GENERACION = "gemini-2.5-flash"
 MODELO_EMBEDDING = "models/gemini-embedding-001"
 MODELO_RERANK = "rerank-multilingual-v3.0"
 
-TOP_K_CANDIDATOS = 8   # cuántos chunks candidatos trae el Recuperador 
-TOP_N_RERANK = 3        # cuántos se quedan después de Cohere
+TOP_K_CANDIDATOS = 8   # chunks candidatos que trae el Recuperador (ChromaDB) 
+TOP_N_RERANK = 3        # chunks que se quedan después del Evaluador (Cohere)
 UMBRAL_COHERE = 0.25     # corte de seguridad sobre relevance_score de Cohere 
 
 llm = ChatGoogleGenerativeAI(

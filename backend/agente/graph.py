@@ -4,8 +4,7 @@ Ensamblado del grafo del agente.
 Conecta los 4 nodos (Clasificador -> Recuperador -> Evaluador ->
 Generador) con la bifurcación: si la pregunta es
 charla casual o está fuera de tema, el Clasificador salta directo al
-Generador sin pasar por Recuperador ni Evaluador -- no tiene sentido
-buscar en ChromaDB si el usuario solo dijo "Hola".
+Generador sin pasar por Recuperador ni Evaluador 
 """
 
 from langgraph.graph import END, StateGraph
@@ -42,9 +41,6 @@ def construir_grafo() -> StateGraph:
         },
     )
 
-    # Nodo 2 -> 3 -> 4 siempre en línea recta (elimina el loop: si el 
-    # Evaluador no encuentra nada útil, no vuelve a buscar, sigue directo 
-    # al Generador para que redacte el "no sé").
     grafo.add_edge("recuperador", "evaluador")
     grafo.add_edge("evaluador", "generador")
 
@@ -53,9 +49,7 @@ def construir_grafo() -> StateGraph:
     return grafo
 
 
-# Grafo compilado, listo para usar desde FastAPI (main.py) con
-# agente.invoke(estado_inicial) o agente.astream(estado_inicial) para
-# el modo streaming.
+
 agente = construir_grafo().compile()
 
 
