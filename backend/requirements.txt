@@ -11,6 +11,7 @@ langchain==1.3.11
 langchain-core==1.4.8
 langchain-google-genai==4.2.7
 langgraph==1.2.8
+cohere
 
 # Base de Datos Vectorial
 chromadb==1.5.9
