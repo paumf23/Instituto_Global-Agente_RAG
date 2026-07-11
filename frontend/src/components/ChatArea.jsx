@@ -32,7 +32,7 @@ export default function ChatArea({
     <main className="main-area" id="main-area">
       {/* Header bar with slogan */}
       <div className="header-bar">
-        <div className="slogan-badge">Educación sin fronteras, futuro sin límites</div>
+        <div className="slogan-badge">Instituto Global de Educación Online — Formación accesible y de calidad para estudiantes de todo el mundo</div>
       </div>
 
       {/* Chat container */}
@@ -41,7 +41,6 @@ export default function ChatArea({
         {showPreguntas && (
           <div className="welcome-section">
             <h2 className="welcome-title">Hola, preguntame lo que quieras</h2>
-            <p className="welcome-subtitle">Soy el asistente virtual de Instituto Global</p>
           </div>
         )}
 
@@ -55,7 +54,6 @@ export default function ChatArea({
                 onClick={() => onPreguntaClick(p.text)}
                 id={`pregunta-btn-${idx}`}
               >
-                <span className="pregunta-btn-icon">{p.icon}</span>
                 <span>{p.text}</span>
               </button>
             ))}
@@ -84,7 +82,7 @@ export default function ChatArea({
               id="send-btn"
               aria-label="Enviar"
             >
-              {isLoading ? '⏳' : '➤'}
+              {isLoading ? '...' : '→'}
             </button>
           </div>
         </div>
@@ -116,10 +114,10 @@ export default function ChatArea({
                 {metadata?.tipo_pregunta && (
                   <span className={`tipo-badge ${metadata.tipo_pregunta}`}>
                     {metadata.tipo_pregunta === 'consulta_academica'
-                      ? '📚 Académica'
+                      ? 'Académica'
                       : metadata.tipo_pregunta === 'charla_casual'
-                      ? '💬 Casual'
-                      : '🚫 Fuera de tema'}
+                      ? 'Casual'
+                      : 'Fuera de tema'}
                   </span>
                 )}
               </div>
@@ -130,11 +128,11 @@ export default function ChatArea({
               {/* Citations */}
               {metadata?.citas && metadata.citas.length > 0 && (
                 <div className="citations-section">
-                  <div className="citations-title">📎 Fuentes</div>
+                  <div className="citations-title">Fuentes</div>
                   <div className="citations-list">
                     {metadata.citas.map((cita, idx) => (
                       <span key={idx} className="citation-chip">
-                        📑 {cita}
+                        {cita}
                       </span>
                     ))}
                   </div>
@@ -153,7 +151,7 @@ export default function ChatArea({
               id="new-question-btn"
               style={{ display: 'inline-flex', justifyContent: 'center' }}
             >
-              🔄 Nueva consulta
+              Nueva consulta
             </button>
           </div>
         )}

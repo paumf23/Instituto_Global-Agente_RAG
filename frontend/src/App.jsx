@@ -15,10 +15,12 @@ const INITIAL_DOCS = [
 
 // Predefined questions
 const PREGUNTAS = [
-  { icon: '👋', text: 'Hola, qué puedo consultarte?' },
-  { icon: '🏖️', text: 'Si me voy de vacaciones un mes, puedo pasar el tiempo de mi curso y retomarlo a la vuelta?' },
-  { icon: '💰', text: 'Cuantos dias tengo para pedir un reembolso completo desde que empieza el curso?' },
-  { icon: '🌎', text: 'Cual es la capital de Argentina?' },
+  { text: '¿Hola, qué puedo consultarte?' },
+  { text: '¿Quién eres y qué puedes hacer?' },
+  { text: '¿Si me voy de vacaciones un mes, puedo pasar el tiempo de mi curso y retomarlo a la vuelta?' },
+  { text: '¿Cuántos días tengo para pedir un reembolso completo desde que empieza el curso?' },
+  { text: '¿Cuál es la capital de Argentina?' },
+  { text: '¿Qué promedio necesito para no perder mi beca?' },
 ];
 
 export default function App() {
@@ -94,7 +96,7 @@ export default function App() {
       }
     } catch (err) {
       console.error('Error en la consulta:', err);
-      setResponseText('⚠️ Ocurrió un error al procesar la consulta. Asegurate de que el backend esté corriendo.');
+      setResponseText('Ocurrió un error al procesar la consulta. Asegurate de que el backend esté corriendo.');
     } finally {
       setIsLoading(false);
       setIsStreaming(false);
@@ -182,7 +184,7 @@ export default function App() {
       }
     } catch (err) {
       console.error('Error en la consulta:', err);
-      setResponseText('⚠️ Ocurrió un error al procesar la consulta. Asegurate de que el backend esté corriendo.');
+      setResponseText('Ocurrió un error al procesar la consulta. Asegurate de que el backend esté corriendo.');
     } finally {
       setIsLoading(false);
       setIsStreaming(false);

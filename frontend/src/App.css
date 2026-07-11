@@ -302,19 +302,16 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 20px;
+  padding: 10px 24px;
   background: linear-gradient(135deg, var(--green-700), var(--green-600));
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-lg);
   font-size: 0.82rem;
   font-weight: 500;
   color: var(--white);
   letter-spacing: 0.02em;
   box-shadow: var(--shadow-glow);
-}
-
-.slogan-badge::before {
-  content: '🌍';
-  font-size: 1rem;
+  text-align: center;
+  line-height: 1.4;
 }
 
 /* Chat container */

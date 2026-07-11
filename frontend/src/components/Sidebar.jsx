@@ -39,7 +39,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
             onChange={handleChange}
             id="file-upload-input"
           />
-          <div className="upload-icon">📄</div>
+          <div className="upload-icon">+</div>
           <div className="upload-text">
             <strong>Hacé clic</strong> o arrastrá un PDF
           </div>
@@ -51,7 +51,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
         <div className="sidebar-section-title">Documentos</div>
         {documents.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-state-icon">📂</div>
+            <div className="empty-state-icon">—</div>
             <div className="empty-state-text">No hay documentos cargados</div>
           </div>
         ) : (
