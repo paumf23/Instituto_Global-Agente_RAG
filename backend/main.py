@@ -12,20 +12,28 @@ import asyncio
 import json
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Cargar .env ANTES de importar módulos que leen variables de entorno
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 
 from agente.graph import agente
 from ingesta.procesar_pdfs import inicializar_vectorstore
 
+
+STATUS_MESSAGES = {
+    "clasificador": "Identificando tipo de pregunta...",
+    "recuperador": "Buscando en la base de información...",
+    "evaluador": "Definiendo información relevante...",
+    "generador": "Elaborando respuesta..."
+}
 
 # ---------------------------------------------------------------------------
 # Lifespan (arranque / cierre del servidor)
@@ -75,7 +83,6 @@ class PreguntaRequest(BaseModel):
 
 @app.post("/chat")
 async def chat(req: PreguntaRequest):
-    """Recibe una pregunta y responde con streaming SSE token a token."""
 
     estado_inicial = {
         "pregunta": req.pregunta,
@@ -94,8 +101,17 @@ async def chat(req: PreguntaRequest):
         async for evento in agente.astream_events(estado_inicial, version="v2"):
             kind = evento["event"]
 
-            # Streamear tokens SOLO del nodo Generador (no del Clasificador)
-            if kind == "on_chat_model_stream":
+            # 1. ENVIAR MENSAJES DE STATUS (cuando un nodo comienza)
+            if kind == "on_chain_start":
+                node_name = evento.get("name")
+                if node_name in STATUS_MESSAGES:
+                    yield {
+                        "event": "status",
+                        "data": json.dumps({"message": STATUS_MESSAGES[node_name]}),
+                    }
+
+            # 2. STREAMING DE TOKENS (del nodo Generador)
+            elif kind == "on_chat_model_stream":
                 nodo = evento.get("metadata", {}).get("langgraph_node", "")
                 if nodo == "generador":
                     token = evento["data"]["chunk"].content
@@ -105,7 +121,7 @@ async def chat(req: PreguntaRequest):
                             "data": json.dumps({"token": token}),
                         }
 
-            # Capturar tipo_pregunta y citas a medida que los nodos terminan
+            # 3. CAPTURAR RESULTADOS FINALES (tipo_pregunta y citas)
             elif kind == "on_chain_end":
                 output = evento["data"].get("output", {})
                 if isinstance(output, dict):
@@ -114,7 +130,7 @@ async def chat(req: PreguntaRequest):
                     if "citas" in output:
                         citas = output["citas"]
 
-        # Enviar metadata al final (tipo de pregunta + citas de fuentes)
+        # 4. ENVIAR METADATA Y CERRAR STREAM
         yield {
             "event": "metadata",
             "data": json.dumps({
@@ -129,5 +145,33 @@ async def chat(req: PreguntaRequest):
 
 @app.get("/health")
 async def health():
-    """Endpoint de verificación: confirma que el servidor está corriendo."""
     return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
+# Endpoints de documentos
+# ---------------------------------------------------------------------------
+
+DOCS_DIR = Path(__file__).resolve().parent.parent / "documentos"
+
+
+@app.get("/documentos")
+async def listar_documentos():
+    """Devuelve la lista de PDFs disponibles en la carpeta /documentos."""
+    if not DOCS_DIR.exists():
+        return {"documentos": []}
+    pdfs = sorted(f.name for f in DOCS_DIR.iterdir() if f.suffix.lower() == ".pdf")
+    return {"documentos": pdfs}
+
+
+@app.get("/documentos/{nombre}")
+async def servir_documento(nombre: str):
+    """Sirve un PDF específico para visualización en el frontend."""
+    ruta = DOCS_DIR / nombre
+    if not ruta.exists() or not ruta.suffix.lower() == ".pdf":
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    return FileResponse(
+        path=str(ruta),
+        media_type="application/pdf",
+        filename=nombre,
+    )

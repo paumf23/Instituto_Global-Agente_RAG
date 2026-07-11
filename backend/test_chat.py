@@ -1,15 +1,5 @@
 """
 Script de prueba para el endpoint POST /chat.
-
-Uso:
-  1. Asegurate de que el servidor esté corriendo:
-     ./venv/bin/python -m uvicorn main:app --reload
-
-  2. En otra terminal, corré este script:
-     ./venv/bin/python test_chat.py
-
-  Vas a ver los tokens apareciendo en tiempo real en la consola,
-  igual que los vería el frontend.
 """
 
 import httpx
@@ -45,20 +35,30 @@ def test_pregunta(pregunta: str):
 
                 # Parsear líneas SSE: "event: token", "data: {...}"
                 if linea.startswith("event:"):
-                    # Guardamos el tipo de evento para la próxima línea de data
+                    # Guarda el tipo de evento para la próxima línea de data
                     test_pregunta._evento_actual = linea[len("event:"):].strip()
 
                 elif linea.startswith("data:"):
                     raw_data = linea[len("data:"):].strip()
                     evento = getattr(test_pregunta, "_evento_actual", "")
 
-                    if evento == "token":
+                    # 1. Manejo de mensajes de estado (los mensajes amigables)
+                    if evento == "status":
+                        try:
+                            payload = json.loads(raw_data)
+                            print(f"⚙️ {payload['message']}")
+                        except json.JSONDecodeError:
+                            print(f"⚙️ {raw_data}")
+
+                    # 2. Manejo de los tokens de la respuesta
+                    elif evento == "token":
                         try:
                             payload = json.loads(raw_data)
                             print(payload["token"], end="", flush=True)
                         except json.JSONDecodeError:
                             print(raw_data, end="", flush=True)
 
+                    # 3. Manejo de metadatos (tipo de pregunta y citas)
                     elif evento == "metadata":
                         try:
                             payload = json.loads(raw_data)
@@ -73,6 +73,7 @@ def test_pregunta(pregunta: str):
                         except json.JSONDecodeError:
                             print(f"\n📊 Metadata (raw): {raw_data}")
 
+                    # 4. Finalización del stream
                     elif evento == "done":
                         print("\n✅ Stream finalizado.")
 
