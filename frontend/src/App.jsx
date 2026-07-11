@@ -15,9 +15,9 @@ const INITIAL_DOCS = [
 
 // Predefined questions
 const PREGUNTAS = [
-  { text: '¿Hola, qué puedo consultarte?' },
+  { text: 'Hola, ¿Qué puedo consultarte?' },
   { text: '¿Quién eres y qué puedes hacer?' },
-  { text: '¿Si me voy de vacaciones un mes, puedo pasar el tiempo de mi curso y retomarlo a la vuelta?' },
+  { text: 'Si me voy de vacaciones un mes, ¿Puedo pausar el tiempo de mi curso y retomarlo a la vuelta?' },
   { text: '¿Cuántos días tengo para pedir un reembolso completo desde que empieza el curso?' },
   { text: '¿Cuál es la capital de Argentina?' },
   { text: '¿Qué promedio necesito para no perder mi beca?' },

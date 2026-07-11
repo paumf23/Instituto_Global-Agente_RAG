@@ -32,7 +32,7 @@ export default function ChatArea({
     <main className="main-area" id="main-area">
       {/* Header bar with slogan */}
       <div className="header-bar">
-        <div className="slogan-badge">Instituto Global de Educación Online — Formación accesible y de calidad para estudiantes de todo el mundo</div>
+        <div className="slogan-badge">Formación accesible y de calidad para estudiantes de todo el mundo — Aprendé a tu ritmo, desde cualquier lugar</div>
       </div>
 
       {/* Chat container */}
@@ -82,7 +82,7 @@ export default function ChatArea({
               id="send-btn"
               aria-label="Enviar"
             >
-              {isLoading ? '...' : '→'}
+              {isLoading ? '...' : '➤'}
             </button>
           </div>
         </div>
