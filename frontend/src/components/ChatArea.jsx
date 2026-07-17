@@ -1,4 +1,28 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
+
+/**
+ * Convierte markdown básico a HTML para renderizar las respuestas de Gemini.
+ * Diseñado para ser seguro durante streaming (texto parcial).
+ */
+function renderMarkdown(text) {
+  if (!text) return '';
+  try {
+    let html = text
+      // Escapar HTML
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      // Negritas: **texto**
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // Reemplazar viñetas al inicio de línea por un punto grueso
+      .replace(/^[\-\*]\s+/gm, '• ')
+      // Saltos de línea simples → <br>
+      .replace(/\n/g, '<br>');
+    return html;
+  } catch {
+    return text;
+  }
+}
 
 export default function ChatArea({
   preguntas,
@@ -19,7 +43,7 @@ export default function ChatArea({
 }) {
   const responseEndRef = useRef(null);
 
-  // Auto-scroll as response streams in
+
   useEffect(() => {
     if (responseText || statusMessage) {
       responseEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -30,12 +54,12 @@ export default function ChatArea({
 
   return (
     <main className="main-area" id="main-area">
-      {/* Header bar with slogan */}
+      {/* Enecabezado con slogan*/}
       <div className="header-bar">
         <div className="slogan-badge">Formación accesible y de calidad para estudiantes de todo el mundo — Aprendé a tu ritmo, desde cualquier lugar</div>
       </div>
 
-      {/* Chat container */}
+      {/* Ventana del chat*/}
       <div className="chat-container" id="chat-container">
         {/* Welcome */}
         {showPreguntas && (
@@ -44,7 +68,7 @@ export default function ChatArea({
           </div>
         )}
 
-        {/* Predefined questions */}
+        {/* Preguntas predefinidas */}
         {showPreguntas && (
           <div className="preguntas-grid" id="preguntas-grid">
             {preguntas.map((p, idx) => (
@@ -87,14 +111,14 @@ export default function ChatArea({
           </div>
         </div>
 
-        {/* User question bubble */}
+        {/* Burbuja de la consulta del usuario */}
         {currentQuestion && (isLoading || hasResponded) && (
           <div className="user-question">
             <div className="user-question-bubble">{currentQuestion}</div>
           </div>
         )}
 
-        {/* Status messages (process feedback) */}
+        {/* Estado actual (feedback del proceso) */}
         {statusMessage && (
           <div className="status-container" id="status-container">
             <div className="status-message" key={statusMessage}>
@@ -104,7 +128,7 @@ export default function ChatArea({
           </div>
         )}
 
-        {/* Response */}
+        {/* Respuesta */}
         {(responseText || hasResponded) && responseText && (
           <div className="response-area" id="response-area">
             <div className="response-card">
@@ -116,25 +140,30 @@ export default function ChatArea({
                     {metadata.tipo_pregunta === 'consulta_academica'
                       ? 'Académica'
                       : metadata.tipo_pregunta === 'charla_casual'
-                      ? 'Casual'
-                      : 'Fuera de tema'}
+                        ? 'Casual'
+                        : 'Fuera de tema'}
                   </span>
                 )}
               </div>
-              <div className={`response-text ${isStreaming ? 'streaming-cursor' : ''}`}>
-                {responseText}
-              </div>
+              <div
+                className={`response-text ${isStreaming ? 'streaming-cursor' : ''}`}
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(responseText) }}
+              />
 
-              {/* Citations */}
+              {/* Referencias */}
               {metadata?.citas && metadata.citas.length > 0 && (
                 <div className="citations-section">
                   <div className="citations-title">Fuentes</div>
                   <div className="citations-list">
-                    {metadata.citas.map((cita, idx) => (
-                      <span key={idx} className="citation-chip">
-                        {cita}
-                      </span>
-                    ))}
+                    {metadata.citas.map((cita, idx) => {
+                      const name = cita.fuente ? cita.fuente.replace('.pdf', '').replace(/_/g, ' ') : '';
+                      const pag = cita.pagina ? ` (pág. ${cita.pagina})` : '';
+                      return (
+                        <span key={idx} className="citation-chip" title={cita.fuente}>
+                          📑 {name}{pag}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -142,7 +171,7 @@ export default function ChatArea({
           </div>
         )}
 
-        {/* New question button after response */}
+        {/* Nuevo botón de pregunta después de respuesta*/}
         {hasResponded && !isLoading && (
           <div style={{ textAlign: 'center', marginTop: '16px' }}>
             <button

@@ -5,7 +5,7 @@ import PdfModal from './components/PdfModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// Documents bundled with the project
+
 const INITIAL_DOCS = [
   'FAQ_Cursos_y_Certificados.pdf',
   'Politica_de_Reembolsos.pdf',
@@ -13,9 +13,9 @@ const INITIAL_DOCS = [
   'Reglamento_del_Estudiante.pdf',
 ];
 
-// Predefined questions
+
 const PREGUNTAS = [
-  { text: 'Hola, ¿Qué puedo consultarte?' },
+  { text: '¿Cómo funciona el programa de referidos?' },
   { text: '¿Quién eres y qué puedes hacer?' },
   { text: 'Si me voy de vacaciones un mes, ¿Puedo pausar el tiempo de mi curso y retomarlo a la vuelta?' },
   { text: '¿Cuántos días tengo para pedir un reembolso completo desde que empieza el curso?' },
@@ -27,7 +27,7 @@ export default function App() {
   const [documents, setDocuments] = useState(INITIAL_DOCS);
   const [modalDoc, setModalDoc] = useState(null);
 
-  // Chat state
+
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
@@ -40,13 +40,13 @@ export default function App() {
   const inputRef = useRef(null);
 
   // ---------------------------------------------------------------
-  // Send question to backend via SSE
+  // Enviar pregunta al backend mediante SSE
   // ---------------------------------------------------------------
   const handleSubmit = useCallback(async (questionText) => {
     const pregunta = (questionText || inputValue).trim();
     if (!pregunta || isLoading) return;
 
-    // Reset state
+    // Estado inicial
     setCurrentQuestion(pregunta);
     setInputValue('');
     setIsLoading(true);
@@ -87,10 +87,6 @@ export default function App() {
           if (line.startsWith('data:')) {
             const rawData = line.slice(5).trim();
             if (!rawData) continue;
-
-            // We need to determine event type from the previous event: line
-            // SSE format: event: <type>\ndata: <json>\n\n
-            // Let's parse differently — look back in the lines
           }
         }
       }
@@ -105,7 +101,7 @@ export default function App() {
     }
   }, [inputValue, isLoading]);
 
-  // Better SSE handling using EventSource-like manual parsing
+
   const handleSubmitSSE = useCallback(async (questionText) => {
     const pregunta = (questionText || inputValue).trim();
     if (!pregunta || isLoading) return;
@@ -139,10 +135,11 @@ export default function App() {
 
         buffer += decoder.decode(value, { stream: true });
 
-        // Parse SSE events from buffer
-        // Format: event: type\ndata: json\n\n
+        // Normalizar \r\n a \n (sse-starlette envía \r\n)
+        buffer = buffer.replace(/\r\n/g, '\n');
+
         const eventBlocks = buffer.split('\n\n');
-        buffer = eventBlocks.pop() || ''; // last incomplete block stays in buffer
+        buffer = eventBlocks.pop() || '';
 
         for (const block of eventBlocks) {
           if (!block.trim()) continue;
@@ -165,20 +162,19 @@ export default function App() {
             try {
               const parsed = JSON.parse(eventData);
               setStatusMessage(parsed.message);
-            } catch {}
+            } catch { }
           } else if (eventType === 'token') {
             try {
               const parsed = JSON.parse(eventData);
               accumulatedText += parsed.token;
               setResponseText(accumulatedText);
-            } catch {}
+            } catch { }
           } else if (eventType === 'metadata') {
             try {
               const parsed = JSON.parse(eventData);
               setMetadata(parsed);
-            } catch {}
+            } catch { }
           } else if (eventType === 'done') {
-            // Stream complete
           }
         }
       }
@@ -194,18 +190,17 @@ export default function App() {
   }, [inputValue, isLoading]);
 
   // ---------------------------------------------------------------
-  // Handle predefined question click
+  // Preguntas predefinidas
   // ---------------------------------------------------------------
   const handlePreguntaClick = useCallback((text) => {
     setInputValue(text);
-    // Trigger submit after a tiny delay so the user sees the text appear
     setTimeout(() => {
       handleSubmitSSE(text);
     }, 150);
   }, [handleSubmitSSE]);
 
   // ---------------------------------------------------------------
-  // Handle file upload
+  // Carga de archivos PDF
   // ---------------------------------------------------------------
   const handleFileUpload = useCallback((file) => {
     if (!file || !file.name.endsWith('.pdf')) return;
@@ -216,7 +211,7 @@ export default function App() {
   }, [documents]);
 
   // ---------------------------------------------------------------
-  // Handle Enter key in input
+  // Presionar tecla Enter
   // ---------------------------------------------------------------
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -226,7 +221,7 @@ export default function App() {
   }, [handleSubmitSSE]);
 
   // ---------------------------------------------------------------
-  // New chat / reset
+  // Nuevo Chat / reset
   // ---------------------------------------------------------------
   const handleReset = useCallback(() => {
     setInputValue('');

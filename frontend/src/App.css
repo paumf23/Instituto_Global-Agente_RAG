@@ -1,9 +1,8 @@
 /* =============================================
-   Instituto Global — Design System
-   Colors: dark greens, white text, black accents
+   Instituto Global — Diseño del sistema
    ============================================= */
 
-/* --- CSS Custom Properties --- */
+/* --- Propiedades personalizadas de CSS --- */
 :root {
   --green-950: #0a1f13;
   --green-900: #0f2e1a;
@@ -133,7 +132,7 @@ body {
   opacity: 0.85;
 }
 
-/* Upload section */
+/* Sección de carga */
 .sidebar-upload {
   padding: 20px;
   border-bottom: 1px solid var(--white-10);
@@ -187,7 +186,7 @@ body {
   font-weight: 500;
 }
 
-/* Document list */
+/* Lista de documentos */
 .sidebar-documents {
   flex: 1;
   overflow-y: auto;
@@ -252,7 +251,7 @@ body {
   animation: fadeSlideIn 0.3s ease-out;
 }
 
-/* --- Main Content Area --- */
+/* --- Area principal de contenido --- */
 .main-area {
   flex: 1;
   display: flex;
@@ -263,7 +262,7 @@ body {
   position: relative;
 }
 
-/* Education/global themed stamp pattern in subtle gray */
+/* Sello temático de educación/global en gris sutil */
 .main-area::before {
   content: '';
   position: absolute;
@@ -276,7 +275,7 @@ body {
   z-index: 0;
 }
 
-/* Green radial glow behind the content — Gemini-like effect */
+/* Resplandor radial verde detrás del contenido — Efecto similar a Gemini */
 .main-area::after {
   content: '';
   position: absolute;
@@ -285,14 +284,12 @@ body {
   transform: translate(-50%, -50%);
   width: 80%;
   height: 75%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(30, 140, 74, 0.28) 0%,
-    rgba(30, 140, 74, 0.28) 40%,    /* El centro más suave abarca el mismo espacio */
-    rgba(26, 110, 58, 0.16) 65%,
-    rgba(20, 80, 40, 0.07) 82%,
-    transparent 98%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(30, 140, 74, 0.28) 0%,
+      rgba(30, 140, 74, 0.28) 40%,
+      rgba(26, 110, 58, 0.16) 65%,
+      rgba(20, 80, 40, 0.07) 82%,
+      transparent 98%);
   pointer-events: none;
   z-index: 1;
   filter: blur(55px);
@@ -374,7 +371,7 @@ body {
   font-weight: 300;
 }
 
-/* Predefined questions */
+/* Preguntas Predefinifas*/
 .preguntas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -481,7 +478,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Status messages (process indicator) */
+/* Estado del proceso */
 .status-container {
   min-height: 32px;
   margin-bottom: 16px;
@@ -512,7 +509,7 @@ body {
   animation: dotPulse 1.2s ease-in-out infinite;
 }
 
-/* Response area */
+/* Area de respuesta */
 .response-area {
   flex: 1;
   overflow-y: auto;
@@ -558,7 +555,7 @@ body {
   margin-bottom: 10px;
 }
 
-/* Cursor blink while streaming */
+/* Cursor parpadeante mientras se transmite */
 .streaming-cursor::after {
   content: '▌';
   animation: blink 0.8s step-end infinite;
@@ -566,7 +563,7 @@ body {
   font-weight: 300;
 }
 
-/* Sources / Citations */
+/* Fuentes / Citas */
 .citations-section {
   margin-top: 18px;
   padding-top: 16px;
@@ -715,12 +712,13 @@ body {
   background: var(--white);
 }
 
-/* --- Animations --- */
+/* --- Animaciones --- */
 @keyframes fadeSlideIn {
   from {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -728,8 +726,13 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modalSlideIn {
@@ -737,6 +740,7 @@ body {
     opacity: 0;
     transform: scale(0.95) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -744,15 +748,25 @@ body {
 }
 
 @keyframes statusPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes dotPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.4);
     opacity: 0.5;
@@ -760,8 +774,15 @@ body {
 }
 
 @keyframes blink {
-  from, to { opacity: 1; }
-  50% { opacity: 0; }
+
+  from,
+  to {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* --- Empty state --- */
@@ -782,7 +803,7 @@ body {
   line-height: 1.5;
 }
 
-/* --- User question display --- */
+/* --- Usuario pregunta --- */
 .user-question {
   display: flex;
   justify-content: flex-end;

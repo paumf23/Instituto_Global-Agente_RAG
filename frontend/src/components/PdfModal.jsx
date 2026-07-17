@@ -21,18 +21,39 @@ export default function PdfModal({ docName, onClose }) {
             <span>📑</span>
             {formatDocName(docName)}
           </div>
-          <button
-            className="modal-close-btn"
-            onClick={onClose}
-            id="modal-close-btn"
-            aria-label="Cerrar"
-          >
-            ✕
-          </button>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <a
+              href={`${pdfUrl}?download=true`}
+              className="modal-download-btn"
+              title="Descargar PDF"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '18px',
+                color: 'inherit',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '4px'
+              }}
+            >
+              📥
+            </a>
+            <button
+              className="modal-close-btn"
+              onClick={onClose}
+              id="modal-close-btn"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+          </div>
         </div>
         <div className="modal-body">
           <iframe
-            src={pdfUrl}
+            src={`${pdfUrl}#navpanes=0&zoom=100`}
             title={formatDocName(docName)}
           />
         </div>

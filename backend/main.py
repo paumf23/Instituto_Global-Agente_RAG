@@ -165,13 +165,20 @@ async def listar_documentos():
 
 
 @app.get("/documentos/{nombre}")
-async def servir_documento(nombre: str):
-    """Sirve un PDF específico para visualización en el frontend."""
+async def servir_documento(nombre: str, download: bool = False):
+    """Sirve un PDF específico para visualización o descarga."""
     ruta = DOCS_DIR / nombre
     if not ruta.exists() or not ruta.suffix.lower() == ".pdf":
         raise HTTPException(status_code=404, detail="Documento no encontrado")
+    
+    if download:
+        return FileResponse(
+            path=str(ruta),
+            media_type="application/pdf",
+            filename=nombre,
+        )
     return FileResponse(
         path=str(ruta),
         media_type="application/pdf",
-        filename=nombre,
+        headers={"Content-Disposition": "inline"}
     )
