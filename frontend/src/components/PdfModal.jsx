@@ -1,5 +1,4 @@
 export default function PdfModal({ docName, onClose }) {
-  // Use the backend to serve the PDF, or fall back to the /documentos path
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
   const pdfUrl = `${API_URL}/documentos/${encodeURIComponent(docName)}`;
 

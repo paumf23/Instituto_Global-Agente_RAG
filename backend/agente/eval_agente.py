@@ -1,13 +1,5 @@
 """
 Evaluación del agente contra el eval set.
-
-Corre desde backend/, como módulo del paquete (no como script suelto,
-por el mismo motivo de imports relativos que vimos en graph.py):
-
-    python -m agente.eval_agente
-
-Requiere GOOGLE_API_KEY configurada y la colección de ChromaDB ya
-poblada (correr antes ingesta/procesar_pdfs.py).
 """
 
 import os
@@ -85,7 +77,7 @@ CASOS_DE_PRUEBA = [
 def _estado_inicial(pregunta: str) -> EstadoAgente:
     return {
         "pregunta": pregunta,
-        "tipo_pregunta": "consulta_academica",  # placeholder, lo pisa el Clasificador
+        "tipo_pregunta": "consulta_academica",  
         "chunks_candidatos": [],
         "chunks_relevantes": [],
         "tiene_contexto_util": False,

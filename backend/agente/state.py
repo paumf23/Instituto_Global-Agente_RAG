@@ -1,5 +1,6 @@
 """
-Estado compartido del agente (la "memoria" que fluye entre los nodos de LangGraph).
+Estado compartido del agente 
+(la "memoria" que fluye entre los nodos de LangGraph).
 """
 
 from typing import Any, Dict, List, Literal, NotRequired, TypedDict

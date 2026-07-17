@@ -7,7 +7,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
     const file = e.target.files?.[0];
     if (file) {
       onFileUpload(file);
-      e.target.value = ''; // reset so the same file can be re-uploaded
+      e.target.value = '';
     }
   };
 
@@ -19,7 +19,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
 
   return (
     <aside className="sidebar" id="sidebar">
-      {/* Logo & brand */}
+      {/* Logo y Marca */}
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <img src="/logo.png" alt="Instituto Global" />
@@ -28,7 +28,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
         <p className="sidebar-logo-slogan">Educación sin fronteras, futuro sin límites</p>
       </div>
 
-      {/* Upload */}
+      {/* Carga de documentos */}
       <div className="sidebar-upload">
         <div className="sidebar-section-title">Ingresar documento</div>
         <div className="upload-area" onClick={() => fileInputRef.current?.click()}>
@@ -46,7 +46,7 @@ export default function Sidebar({ documents, onDocClick, onFileUpload }) {
         </div>
       </div>
 
-      {/* Document list */}
+      {/* Lista de documentos */}
       <div className="sidebar-documents">
         <div className="sidebar-section-title">Documentos</div>
         {documents.length === 0 ? (

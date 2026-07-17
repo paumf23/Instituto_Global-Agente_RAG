@@ -1,9 +1,5 @@
 import { useEffect, useRef, useMemo } from 'react';
 
-/**
- * Convierte markdown básico a HTML para renderizar las respuestas de Gemini.
- * Diseñado para ser seguro durante streaming (texto parcial).
- */
 function renderMarkdown(text) {
   if (!text) return '';
   try {

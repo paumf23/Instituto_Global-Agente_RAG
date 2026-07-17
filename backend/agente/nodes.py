@@ -124,7 +124,7 @@ def nodo_evaluador(estado: EstadoAgente) -> dict:
             return_documents=False,
         )
     except Exception as error:
-        # Si Cohere falla degradamos usando los candidatos del Recuperador
+        # Si Cohere falla se degrada usando los candidatos del Recuperador
         # sin reordenar, para no afectar el resultado final.
         print(f"[Evaluador] Cohere rerank falló ({error}); usando fallback sin reranking.")
         chunks_relevantes = candidatos[:TOP_N_RERANK]

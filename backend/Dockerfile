@@ -2,7 +2,6 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Instalar herramientas de desarrollo del sistema para construir dependencias nativas
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     python3-dev \
