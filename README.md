@@ -4,7 +4,7 @@ Asistente virtual inteligente que responde preguntas de estudiantes del **Instit
 
 El agente implementa un pipeline **RAG (Retrieval-Augmented Generation)** con arquitectura agentica basada en **LangGraph**: clasifica la intención del usuario, recupera fragmentos relevantes de una base vectorial, los reranquea con un cross-encoder multilingüe y genera respuestas en tiempo real con streaming token a token.
 
-![Pantalla principal del agente](./screenshot_inicio.png)
+![Pantalla principal del agente](./assets/screenshot_inicio.jpg)
 
 ---
 
@@ -110,11 +110,7 @@ flowchart TD
 
 ## 🌐 Demo en Vivo
 
-> **URL pública:** _Próximamente — deploy en proceso._
-
-<!-- Reemplazar la línea de arriba con el link real una vez hecho el deploy, por ejemplo:
-> **URL pública:** [https://tu-dominio.com](https://tu-dominio.com)
--->
+> **URL pública:** [https://instituto-global.ddns.net/](https://instituto-global.ddns.net/)
 
 ---
 
@@ -225,8 +221,8 @@ Instituto_Global-Agente_RAG/
 
 ### Respuesta a una pregunta fuera de tema
 
-![Respuesta del agente a una pregunta fuera de tema](./screenshot_respuesta_fuera_de_tema.png)
+![Respuesta del agente a una pregunta fuera de tema](./assets/screenshot_respuesta_fuera_de_tema.png)
 
 ### Respuesta a una consulta académica (con citas)
 
-![Respuesta del agente a una consulta académica con citas](./screenshot_respuesta_academica.png)
+![Respuesta del agente a una consulta académica con citas](./assets/screenshot_respuesta_academica.png)
